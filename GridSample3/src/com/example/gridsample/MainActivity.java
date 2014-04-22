@@ -38,9 +38,9 @@ public class MainActivity extends Activity implements OnClickListener{
 		shuffle(list);
 
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
-		boolean mov = c.moveToFirst();
+		c.moveToFirst();
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
-		boolean mov2 = c2.moveToFirst();
+		c2.moveToFirst();
 
 		right_name = c.getString(1);
 		right_id = c.getInt(0);
@@ -51,19 +51,7 @@ public class MainActivity extends Activity implements OnClickListener{
 			Button.setOnClickListener(this);
 			Button.setImageResource(0x7f020000 + c2.getInt(0));
 			buttons.add(Button);
-			mov2 = c2.moveToNext();
-
-			strings = strings + c2.getInt(0) + "  ";
-
-/*
-			Button[i] = (ImageButton)findViewById(0x7f080000+list[i]);
-			Button[i] = (ImageButton)findViewById(R.id.imageButton1);
-			Button[i].setImageResource(0x7f020000 + c2.getInt(0));
-			Button[i].setOnClickListener(this);
-			textView.setText(String.format("%d : %s : %d :%d", c.getInt(0),c.getString(1),c.getInt(2),c.getInt(3)));
-			ImageButton imgbtn = new ImageButton(this);
-			imgbtn.setImageResource(list[i]+0x7f020000);
-			*/
+			c2.moveToNext();
 		}
 		//正解ボタン設定
 		right_button_id = 0x7f080000+list[8];
@@ -82,27 +70,6 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		TextView message2 = (TextView)this.findViewById(R.id.textView4);
 		message2.setText(strings);
-		/*
-		Button1 = (ImageButton)findViewById(R.id.imageButton1);
-		Button2 = (ImageButton)findViewById(R.id.imageButton2);
-		Button3 = (ImageButton)findViewById(R.id.imageButton3);
-		Button4 = (ImageButton)findViewById(R.id.imageButton4);
-		Button5 = (ImageButton)findViewById(R.id.imageButton5);
-		Button6 = (ImageButton)findViewById(R.id.imageButton6);
-		Button7 = (ImageButton)findViewById(R.id.imageButton7);
-		Button8 = (ImageButton)findViewById(R.id.imageButton8);
-		Button9 = (ImageButton)findViewById(R.id.imageButton9);
-
-		Button1.setOnClickListener(this);
-		Button2.setOnClickListener(this);
-		Button3.setOnClickListener(this);
-		Button4.setOnClickListener(this);
-		Button5.setOnClickListener(this);
-		Button6.setOnClickListener(this);
-		Button7.setOnClickListener(this);
-		Button8.setOnClickListener(this);
-		Button9.setOnClickListener(this);
-		*/
 	}
 	private void shuffle(int[] arr) {
 		for(int i=arr.length-1; i>0; i--){
