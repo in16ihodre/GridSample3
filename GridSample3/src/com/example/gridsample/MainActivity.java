@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,16 +48,16 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		//まわりのボタン設定
 		for(int i=0;i<c2.getCount();i++){
-			ImageButton Button = (ImageButton) findViewById(0x7f080000 + list[i]);
+			ImageButton Button = (ImageButton) findViewById(0x7f080000 + list[i]+1);
 			Button.setOnClickListener(this);
-			Button.setImageResource(0x7f020000 + c2.getInt(0));
+			Button.setImageResource(0x7f020000 + c2.getInt(0)+1);
 			buttons.add(Button);
 			c2.moveToNext();
 		}
 		//正解ボタン設定
 		right_button_id = 0x7f080000+list[8];
 		ImageButton Button = (ImageButton)findViewById(right_button_id);
-		Button.setImageResource(0x7f020000 + c.getInt(0));
+		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
 		Button.setOnClickListener(this);
 
 		TextView message = (TextView)this.findViewById(R.id.textView1);
@@ -86,6 +87,9 @@ public class MainActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		if(v.getId() ==right_button_id ){
 			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
+			ImageView img = (ImageView)findViewById(R.id.ImageView1);
+			img.setImageResource(R.drawable.circle);
+
 		}else{
 			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
 		}
