@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		 buttons = new ArrayList<ImageButton>();
+		buttons = new ArrayList<ImageButton>();
 
 		MyOpenHelper helper = new MyOpenHelper(this);
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -89,7 +89,6 @@ public class MainActivity extends Activity implements OnClickListener{
 			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
-
 		}else{
 			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
 		}
