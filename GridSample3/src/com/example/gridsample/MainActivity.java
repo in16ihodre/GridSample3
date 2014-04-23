@@ -3,6 +3,7 @@ package com.example.gridsample;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.database.Cursor;
@@ -25,6 +26,8 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	private List<ImageButton> buttons;
 	private String strings;
+	private SQLiteDatabase db;
+	//private ImageView img;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,34 @@ public class MainActivity extends Activity implements OnClickListener{
 		buttons = new ArrayList<ImageButton>();
 
 		MyOpenHelper helper = new MyOpenHelper(this);
-		SQLiteDatabase db = helper.getReadableDatabase();
+		db = helper.getReadableDatabase();
+	}
+	private void shuffle(int[] arr) {
+		for(int i=arr.length-1; i>0; i--){
+			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
 
+			//選ばれた値と交換する
+			int tmp = arr[i];
+			arr[i]  = arr[t];
+			arr[t]  = tmp;
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v.getId() ==right_button_id ){
+			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
+			ImageView img = (ImageView)findViewById(R.id.ImageView1);
+			img.setImageResource(R.drawable.circle);
+			//onStart();
+		}else{
+			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
+			//onStart();
+		}
+	}
+
+	protected void onStart(){
+		super.onStart();
 		shuffle(list);
 
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
@@ -72,34 +101,9 @@ public class MainActivity extends Activity implements OnClickListener{
 		TextView message2 = (TextView)this.findViewById(R.id.textView4);
 		message2.setText(strings);
 	}
-	private void shuffle(int[] arr) {
-		for(int i=arr.length-1; i>0; i--){
-			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
 
-			//選ばれた値と交換する
-			int tmp = arr[i];
-			arr[i]  = arr[t];
-			arr[t]  = tmp;
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		if(v.getId() ==right_button_id ){
-			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
-			ImageView img = (ImageView)findViewById(R.id.ImageView1);
-			img.setImageResource(R.drawable.circle);
-		}else{
-			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-
-	/*	protected void onStart(){
-
-	}
+	/*
 	protected void onResume(){
-
 	}*/
 
 	@Override
