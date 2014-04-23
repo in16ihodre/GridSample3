@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,7 +28,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	private List<ImageButton> buttons;
 	private String strings;
 	private SQLiteDatabase db;
-	//private ImageView img;
+	private AlphaAnimation feedout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,9 @@ public class MainActivity extends Activity implements OnClickListener{
 		db = helper.getReadableDatabase();
 
 		findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
+
+		feedout = new AlphaAnimation( 1, 0 );
+		feedout.setDuration(1000);
 	}
 	private void shuffle(int[] arr) {
 		for(int i=arr.length-1; i>0; i--){
@@ -57,14 +61,16 @@ public class MainActivity extends Activity implements OnClickListener{
 			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
-
-			AlphaAnimation feedout = new AlphaAnimation( 1, 0 );
-			feedout.setDuration(1000);
 			img.startAnimation( feedout );
 			onStart();
 		}else{
-			//Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
-			//onStart();
+			ImageButton button = (ImageButton)findViewById(v.getId());
+			button.startAnimation(feedout);
+			new Handler().postDelayed(new Runnable() {
+				public void run() {
+					onStart();
+				}
+			}, 1000);
 		}
 	}
 
