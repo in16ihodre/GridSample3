@@ -38,11 +38,12 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		MyOpenHelper helper = new MyOpenHelper(this);
 		db = helper.getReadableDatabase();
+
+		findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
 	}
 	private void shuffle(int[] arr) {
 		for(int i=arr.length-1; i>0; i--){
 			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
-
 			//選ばれた値と交換する
 			int tmp = arr[i];
 			arr[i]  = arr[t];
@@ -53,17 +54,16 @@ public class MainActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		if(v.getId() ==right_button_id ){
-			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
 
 			AlphaAnimation feedout = new AlphaAnimation( 1, 0 );
-			feedout.setDuration(2000);
+			feedout.setDuration(1000);
 			img.startAnimation( feedout );
-			findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
 			onStart();
 		}else{
-			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
 			//onStart();
 		}
 	}
@@ -87,9 +87,10 @@ public class MainActivity extends Activity implements OnClickListener{
 			Button.setImageResource(0x7f020000 + c2.getInt(0)+1);
 			buttons.add(Button);
 			c2.moveToNext();
+			//strings = strings + c2.getInt(0) + "   ";
 		}
 		//正解ボタン設定
-		right_button_id = 0x7f080000+list[8];
+		right_button_id = 0x7f080000+list[8]+1;
 		ImageButton Button = (ImageButton)findViewById(right_button_id);
 		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
 		Button.setOnClickListener(this);
@@ -107,8 +108,9 @@ public class MainActivity extends Activity implements OnClickListener{
 		message2.setText(strings);
 	}
 
-	/*
-	protected void onResume(){
+
+	/*protected void onResume(){
+		super.onResume();
 	}*/
 
 	@Override
