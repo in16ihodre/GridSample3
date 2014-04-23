@@ -3,7 +3,6 @@ package com.example.gridsample;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.database.Cursor;
@@ -11,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,7 +56,12 @@ public class MainActivity extends Activity implements OnClickListener{
 			Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
-			//onStart();
+
+			AlphaAnimation feedout = new AlphaAnimation( 1, 0 );
+			feedout.setDuration(2000);
+			img.startAnimation( feedout );
+			findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
+			onStart();
 		}else{
 			Toast.makeText(MainActivity.this, "残念！", Toast.LENGTH_SHORT).show();
 			//onStart();
