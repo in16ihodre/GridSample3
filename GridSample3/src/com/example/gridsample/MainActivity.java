@@ -57,6 +57,10 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+		for(int i = 0;i<buttons.size();i++){
+			ImageButton button = buttons.get(i);
+			button.setEnabled(false);
+		}
 		if(v.getId() ==right_button_id ){
 			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
@@ -77,7 +81,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	protected void onStart(){
 		super.onStart();
 		shuffle(list);
-
+		
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
 		c.moveToFirst();
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
@@ -98,8 +102,15 @@ public class MainActivity extends Activity implements OnClickListener{
 		//正解ボタン設定
 		right_button_id = 0x7f080000+list[8]+1;
 		ImageButton Button = (ImageButton)findViewById(right_button_id);
+		buttons.add(Button);
 		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
 		Button.setOnClickListener(this);
+		
+		
+		for(int i = 0;i<buttons.size();i++){
+			ImageButton button = buttons.get(i);
+			button.setEnabled(true);
+		}
 
 		TextView message = (TextView)this.findViewById(R.id.textView1);
 		message.setText(right_name + "  は？");
@@ -111,7 +122,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		message.setText(list[0] + "  "+  list[1] + "  " + list[2] + "  " + list[3] + "  " +list[4] + "  "  + list[5] + "  " + list[6] + "  " + list[7] + "  " + list[8]);
 
 		TextView message2 = (TextView)this.findViewById(R.id.textView4);
-		message2.setText(strings);
+		//message2.setText(buttons.size());
 	}
 
 
