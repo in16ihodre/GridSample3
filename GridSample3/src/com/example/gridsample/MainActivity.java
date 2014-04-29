@@ -57,27 +57,34 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		for(int i = 0;i<buttons.size();i++){
-			ImageButton button = buttons.get(i);
-			button.setEnabled(false);
-		}
+		//ボタン無効化
+		allbuttonEnable(false);
+		
+		ImageButton but = (ImageButton)findViewById(v.getId());
+		but.setEnabled(false);
 		if(v.getId() ==right_button_id ){
 			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
 			img.startAnimation( feedout );
-			onStart();
+			
 		}else{
 			ImageButton button = (ImageButton)findViewById(v.getId());
 			button.startAnimation(feedout);
-			new Handler().postDelayed(new Runnable() {
-				public void run() {
-					onStart();
-				}
-			}, 1000);
 		}
+		new Handler().postDelayed(new Runnable() {
+			public void run() {
+				onStart();
+			}
+		}, 1000);
 	}
 
+	private void allbuttonEnable(boolean b) {
+		for(int i = 0;i<buttons.size();i++){
+			ImageButton button = buttons.get(i);
+			button.setEnabled(b);
+		}
+	}
 	protected void onStart(){
 		super.onStart();
 		shuffle(list);
@@ -106,11 +113,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
 		Button.setOnClickListener(this);
 		
-		
-		for(int i = 0;i<buttons.size();i++){
-			ImageButton button = buttons.get(i);
-			button.setEnabled(true);
-		}
+		//ボタン有効化
+		allbuttonEnable(true);
 
 		TextView message = (TextView)this.findViewById(R.id.textView1);
 		message.setText(right_name + "  は？");
@@ -122,9 +126,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		message.setText(list[0] + "  "+  list[1] + "  " + list[2] + "  " + list[3] + "  " +list[4] + "  "  + list[5] + "  " + list[6] + "  " + list[7] + "  " + list[8]);
 
 		TextView message2 = (TextView)this.findViewById(R.id.textView4);
-		//message2.setText(buttons.size());
+		//message2.setText(x);
 	}
-
 
 	/*protected void onResume(){
 		super.onResume();
