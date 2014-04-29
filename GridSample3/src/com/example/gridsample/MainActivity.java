@@ -40,55 +40,16 @@ public class MainActivity extends Activity implements OnClickListener{
 		MyOpenHelper helper = new MyOpenHelper(this);
 		db = helper.getReadableDatabase();
 
+		//正解画像透明
 		findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
 
 		feedout = new AlphaAnimation( 1, 0 );
 		feedout.setDuration(1000);
 	}
-	private void shuffle(int[] arr) {
-		for(int i=arr.length-1; i>0; i--){
-			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
-			//選ばれた値と交換する
-			int tmp = arr[i];
-			arr[i]  = arr[t];
-			arr[t]  = tmp;
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		//ボタン無効化
-		allbuttonEnable(false);
-		
-		ImageButton but = (ImageButton)findViewById(v.getId());
-		but.setEnabled(false);
-		if(v.getId() ==right_button_id ){
-			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
-			ImageView img = (ImageView)findViewById(R.id.ImageView1);
-			img.setImageResource(R.drawable.circle);
-			img.startAnimation( feedout );
-			
-		}else{
-			ImageButton button = (ImageButton)findViewById(v.getId());
-			button.startAnimation(feedout);
-		}
-		new Handler().postDelayed(new Runnable() {
-			public void run() {
-				onStart();
-			}
-		}, 1000);
-	}
-
-	private void allbuttonEnable(boolean b) {
-		for(int i = 0;i<buttons.size();i++){
-			ImageButton button = buttons.get(i);
-			button.setEnabled(b);
-		}
-	}
 	protected void onStart(){
 		super.onStart();
 		shuffle(list);
-		
+
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
 		c.moveToFirst();
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
@@ -112,7 +73,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		buttons.add(Button);
 		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
 		Button.setOnClickListener(this);
-		
+
 		//ボタン有効化
 		allbuttonEnable(true);
 
@@ -129,6 +90,47 @@ public class MainActivity extends Activity implements OnClickListener{
 		//message2.setText(x);
 	}
 
+
+	@Override
+	public void onClick(View v) {
+		//ボタン無効化
+		allbuttonEnable(false);
+		if(v.getId() ==right_button_id ){
+			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
+			ImageView img = (ImageView)findViewById(R.id.ImageView1);
+			img.setImageResource(R.drawable.circle);
+			img.startAnimation( feedout );
+
+		}
+		else{
+			ImageButton button = (ImageButton)findViewById(v.getId());
+			button.startAnimation(feedout);
+		}
+		new Handler().postDelayed(new Runnable() {
+			public void run() {
+				onStart();
+			}
+		}, 1000);
+	}
+
+	private void shuffle(int[] arr) {
+		for(int i=arr.length-1; i>0; i--){
+			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
+			//選ばれた値と交換する
+			int tmp = arr[i];
+			arr[i]  = arr[t];
+			arr[t]  = tmp;
+		}
+	}
+
+	private void allbuttonEnable(boolean b) {
+		for(int i = 0;i<buttons.size();i++){
+			ImageButton button = buttons.get(i);
+			button.setEnabled(b);
+		}
+	}
+
+
 	/*protected void onResume(){
 		super.onResume();
 	}*/
@@ -139,5 +141,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 
 }
