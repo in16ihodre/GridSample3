@@ -43,6 +43,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		//正解画像透明
 		findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
 
+		//フェードアウトアニメーションの設定
 		feedout = new AlphaAnimation( 1, 0 );
 		feedout.setDuration(1000);
 	}
@@ -50,8 +51,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		super.onStart();
 		shuffle(list);
 
+		//正解パネルの取り出し
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
 		c.moveToFirst();
+		//周りのパネルの取り出し
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
 		c2.moveToFirst();
 
@@ -113,6 +116,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		}, 1000);
 	}
 
+	//1～9をランダムに並び替え　ボタン配置用
 	private void shuffle(int[] arr) {
 		for(int i=arr.length-1; i>0; i--){
 			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
