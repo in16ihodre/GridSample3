@@ -43,7 +43,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		//正解画像透明
 		findViewById(R.id.ImageView1).setVisibility(ImageView.INVISIBLE);
 
-		//フェードアウトアニメーションの設定
 		feedout = new AlphaAnimation( 1, 0 );
 		feedout.setDuration(1000);
 	}
@@ -51,10 +50,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		super.onStart();
 		shuffle(list);
 
-		//正解パネルの取り出し
 		Cursor c = db.rawQuery("Select * from TableTest order by random() limit 1;", null);
 		c.moveToFirst();
-		//周りのパネルの取り出し
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
 		c2.moveToFirst();
 
@@ -79,36 +76,40 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		//ボタン有効化
 		allbuttonEnable(true);
-
 		TextView message = (TextView)this.findViewById(R.id.textView1);
 		message.setText(right_name + "  は？");
 
 		message = (TextView)this.findViewById(R.id.textView2);
 		message.setText("id:"+ right_id + "   "+"name:" + right_name);
-
+		//message.setText((char)buttons.size());
+		
 		message = (TextView)this.findViewById(R.id.textView3);
 		message.setText(list[0] + "  "+  list[1] + "  " + list[2] + "  " + list[3] + "  " +list[4] + "  "  + list[5] + "  " + list[6] + "  " + list[7] + "  " + list[8]);
 
-		TextView message2 = (TextView)this.findViewById(R.id.textView4);
-		//message2.setText(x);
+		message = (TextView)this.findViewById(R.id.textView4);
+		//message.setText(2);
 	}
 
-
+	//ボタンが押されたら
 	@Override
 	public void onClick(View v) {
 		//ボタン無効化
 		allbuttonEnable(false);
+		//正解
 		if(v.getId() ==right_button_id ){
 			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
 			img.setImageResource(R.drawable.circle);
 			img.startAnimation( feedout );
-
 		}
+		//不正解
 		else{
-			ImageButton button = (ImageButton)findViewById(v.getId());
-			button.startAnimation(feedout);
+			for(int i = 0;i<8;i++){
+				ImageButton button = buttons.get(i);
+				button.startAnimation(feedout);
+			}
 		}
+		//フェードアウト分の時間待ち
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
 				onStart();
@@ -116,7 +117,6 @@ public class MainActivity extends Activity implements OnClickListener{
 		}, 1000);
 	}
 
-	//1～9をランダムに並び替え　ボタン配置用
 	private void shuffle(int[] arr) {
 		for(int i=arr.length-1; i>0; i--){
 			int t = (int)(Math.random() * i);  //0～i-1の中から適当に選ぶ
@@ -145,6 +145,5 @@ public class MainActivity extends Activity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 
 }
