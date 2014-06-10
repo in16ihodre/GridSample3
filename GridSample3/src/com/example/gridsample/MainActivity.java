@@ -26,9 +26,9 @@ public class MainActivity extends Activity implements OnClickListener{
 	int[] list = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 	private List<ImageButton> buttons;
-	private String strings;
 	private SQLiteDatabase db;
 	private AlphaAnimation feedout;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +60,18 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		//まわりのボタン設定
 		for(int i=0;i<c2.getCount();i++){
-			ImageButton Button = (ImageButton) findViewById(0x7f080000 + list[i]+1);
+			ImageButton Button = (ImageButton) findViewById(0x7f080001 + list[i]);
 			Button.setOnClickListener(this);
-			Button.setImageResource(0x7f020000 + c2.getInt(0)+1);
+			Button.setImageResource(0x7f020001 + c2.getInt(0));
 			buttons.add(Button);
 			c2.moveToNext();
 			//strings = strings + c2.getInt(0) + "   ";
 		}
 		//正解ボタン設定
-		right_button_id = 0x7f080000+list[8]+1;
+		right_button_id = 0x7f080001+list[8];
 		ImageButton Button = (ImageButton)findViewById(right_button_id);
 		buttons.add(Button);
-		Button.setImageResource(0x7f020000 + c.getInt(0)+1);
+		Button.setImageResource(0x7f020001 + c.getInt(0));
 		Button.setOnClickListener(this);
 
 		//ボタン有効化
@@ -82,7 +82,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		message = (TextView)this.findViewById(R.id.textView2);
 		message.setText("id:"+ right_id + "   "+"name:" + right_name);
 		//message.setText((char)buttons.size());
-		
+
 		message = (TextView)this.findViewById(R.id.textView3);
 		message.setText(list[0] + "  "+  list[1] + "  " + list[2] + "  " + list[3] + "  " +list[4] + "  "  + list[5] + "  " + list[6] + "  " + list[7] + "  " + list[8]);
 
@@ -109,6 +109,7 @@ public class MainActivity extends Activity implements OnClickListener{
 				button.startAnimation(feedout);
 			}
 		}
+		buttons.clear();
 		//フェードアウト分の時間待ち
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
