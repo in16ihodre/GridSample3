@@ -119,7 +119,7 @@ public class MainActivity extends Activity implements OnClickListener{
 				button.startAnimation(feedout);
 			}
 		}
-		db.update("TableTest", updateValues, "_id=?", new String[]{right_name});
+		db.update("TableTest", updateValues, "name=?", new String[]{right_name});
 		buttons.clear();
 		//フェードアウト分の時間待ち
 		new Handler().postDelayed(new Runnable() {
