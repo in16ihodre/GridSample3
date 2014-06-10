@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
@@ -28,6 +29,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	private List<ImageButton> buttons;
 	private SQLiteDatabase db;
 	private AlphaAnimation feedout;
+	private int num_ok;
+	private int num_miss;
 
 
 	@Override
@@ -55,8 +58,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		Cursor c2 = db.rawQuery("Select * from TableTest where name <> ? order by random() limit 8;", new String[]{c.getString(1)});
 		c2.moveToFirst();
 
-		right_name = c.getString(1);
 		right_id = c.getInt(0);
+		right_name = c.getString(1);
+		num_ok = c.getInt(2);
+		num_miss = c.getInt(3);
 
 		//まわりのボタン設定
 		for(int i=0;i<c2.getCount();i++){
@@ -95,20 +100,26 @@ public class MainActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		//ボタン無効化
 		allbuttonEnable(false);
+		ContentValues updateValues = new ContentValues();
 		//正解
 		if(v.getId() ==right_button_id ){
 			//Toast.makeText(MainActivity.this, "正解！", Toast.LENGTH_SHORT).show();
 			ImageView img = (ImageView)findViewById(R.id.ImageView1);
+
+			updateValues.put("ok",num_ok + 1 );
+
 			img.setImageResource(R.drawable.circle);
 			img.startAnimation( feedout );
 		}
 		//不正解
 		else{
+			updateValues.put("miss",num_miss + 1 );
 			for(int i = 0;i<8;i++){
 				ImageButton button = buttons.get(i);
 				button.startAnimation(feedout);
 			}
 		}
+		db.update("TableTest", updateValues, "_id=?", new String[]{right_name});
 		buttons.clear();
 		//フェードアウト分の時間待ち
 		new Handler().postDelayed(new Runnable() {
