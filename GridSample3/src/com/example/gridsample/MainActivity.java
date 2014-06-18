@@ -7,12 +7,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
+import android.widget.GridLayout;
+import android.widget.GridLayout.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +39,10 @@ public class MainActivity extends Activity implements OnClickListener{
 	private AlphaAnimation feedout;
 	private int num_ok;
 	private int num_miss;
+	private int width;
+	private int x;
+	private int y;
+	private Bitmap bitmap;
 
 
 	@Override
@@ -48,6 +60,13 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		feedout = new AlphaAnimation( 1, 0 );
 		feedout.setDuration(1000);
+
+		WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
+		// ディスプレイのインスタンス生成
+		Display disp = wm.getDefaultDisplay();
+		Point size = new Point();
+		disp.getSize(size);
+		width = size.x/3;
 	}
 	protected void onStart(){
 		super.onStart();
@@ -63,21 +82,31 @@ public class MainActivity extends Activity implements OnClickListener{
 		num_ok = c.getInt(2);
 		num_miss = c.getInt(3);
 
-		//まわりのボタン設定
-		for(int i=0;i<c2.getCount();i++){
+		Resources res = getResources();
+		for(int i=0;i<=c2.getCount();i++){
+			if(i==8){
+				//正解ボタン設定
+				right_button_id = 0x7f080001+list[i];
+				bitmap = BitmapFactory.decodeResource(res, 0x7f020001 + c.getInt(0));
+			}else{
+				//まわりのボタン設定
+				bitmap = BitmapFactory.decodeResource(res, 0x7f020001 + c2.getInt(0));
+				c2.moveToNext();
+			}
 			ImageButton Button = (ImageButton) findViewById(0x7f080001 + list[i]);
 			Button.setOnClickListener(this);
-			Button.setImageResource(0x7f020001 + c2.getInt(0));
+			GridLayout.LayoutParams params1 = new GridLayout.LayoutParams();
+			params1.width = width;
+			params1.height = width;
+			ColumnRowNum(list[i]);
+			params1.columnSpec = GridLayout.spec(x);
+			params1.rowSpec = GridLayout.spec(y);
+
+			Bitmap bitmap2 = Bitmap.createScaledBitmap(bitmap, width-10, width-10, false);
+			Button.setImageBitmap(bitmap2);
+			Button.setLayoutParams(params1);
 			buttons.add(Button);
-			c2.moveToNext();
-			//strings = strings + c2.getInt(0) + "   ";
 		}
-		//正解ボタン設定
-		right_button_id = 0x7f080001+list[8];
-		ImageButton Button = (ImageButton)findViewById(right_button_id);
-		buttons.add(Button);
-		Button.setImageResource(0x7f020001 + c.getInt(0));
-		Button.setOnClickListener(this);
 
 		//ボタン有効化
 		allbuttonEnable(true);
@@ -143,6 +172,37 @@ public class MainActivity extends Activity implements OnClickListener{
 		for(int i = 0;i<buttons.size();i++){
 			ImageButton button = buttons.get(i);
 			button.setEnabled(b);
+		}
+	}
+
+	private void ColumnRowNum(int i) {
+		if(i==1){
+			x = 0;
+			y = 0;
+		}else if(i==2){
+			x = 1;
+			y = 0;
+		}else if(i==3){
+			x = 2;
+			y = 0;
+		}else if(i==4){
+			x = 0;
+			y = 1;
+		}else if(i==5){
+			x = 1;
+			y = 1;
+		}else if(i==6){
+			x = 2;
+			y = 1;
+		}else if(i==7){
+			x = 0;
+			y = 2;
+		}else if(i==8){
+			x = 1;
+			y = 2;
+		}else if(i==9){
+			x = 2;
+			y = 2;
 		}
 	}
 
